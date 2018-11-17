@@ -4,9 +4,9 @@
 
 
 
-struct Nodo_lista{					//Definición de la estructura que actuará como nodo en la lista.
+struct Nodo_lista{						    	//Definición de la estructura que actuará como nodo en la lista.
 	int valor;
-	struct Nodo_lista *siguiente;	//Puntero al siguiente nodo de la lista. 
+	struct Nodo_lista *siguiente;			//Puntero al siguiente nodo de la lista. 
 };
 typedef struct Nodo_lista NODO_L;
 
@@ -14,7 +14,6 @@ typedef struct Nodo_lista NODO_L;
 
 /*
 ################################################################################################
-
   Nombre Funcion : crear_lista
 
   Descripcion : Módulo que permite crear el primer nodo de la lista (apuntando a NULL). 
@@ -24,7 +23,6 @@ typedef struct Nodo_lista NODO_L;
   Parametros =>	SIN PARÁMETROS.
  
  Valor de Retorno : esta función retorna Void ó vacío.
-
 #################################################################################################
 */
 void crear_lista()
@@ -44,7 +42,6 @@ void crear_lista()
 
 /*
 ################################################################################################
-
   Nombre Funcion : insertar_después
 
   Descripcion : Permite la inserción de un nuevo nodo después de la posición a la que apunta  el 
@@ -59,7 +56,6 @@ void crear_lista()
 				-int elemento: valor del nuevo nodo incorporado a la lista.
  
  Valor de Retorno : esta función retorna Void ó vacío.
-
 #################################################################################################
 */
 void insertar_despues(NODO_L **inicio, NODO_L *p, int elemento)
