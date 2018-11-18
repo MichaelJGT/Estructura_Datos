@@ -1,3 +1,7 @@
+/*
+	Para un correcto espaciado emplear
+	Tab Size: 4
+*/
 
 #include <stdio.h>
 #include <stdlib.h>
