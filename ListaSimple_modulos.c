@@ -1,6 +1,6 @@
 /*
-	Para un correcto espaciado emplear
-	Tab Size: 4
+	Tabulado empleado al editar
+		Tab Size: 4
 */
 
 #include <stdio.h>
@@ -21,15 +21,15 @@ typedef struct Nodo_lista NODO_L;
 
 /*
 ################################################################################################
-  Nombre Función : crear_lista
+  Nombre Función : crear_lista_vacia
 
   Descripción : Módulo que permite crear el primer nodo de la lista (apuntando a NULL). 
 
-  Declaración : void crear_lista();
+  Declaración : NODO_L* Crear_lista_vacia(NODO_L *inicio);
 
-  Parámetros =>	SIN PARÁMETROS.
+  Parámetros =>	-NODO_L *inicio: primer nodo.
  
- Valor de Retorno : esta función retorna Void ó vacío.
+ Valor de Retorno : esta función retorna un puntero a NODO_L.
 #################################################################################################
 */
 NODO_L* Crear_lista(NODO_L *inicio)
