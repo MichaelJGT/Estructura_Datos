@@ -1,31 +1,34 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#define verdadero 1
+#define falso 0
 
 
 
 struct Nodo_lista{						    	//Definición de la estructura que actuará como nodo en la lista.
-	int valor;
+	int dato;
 	struct Nodo_lista *siguiente;			//Puntero al siguiente nodo de la lista. 
 };
 typedef struct Nodo_lista NODO_L;
 
 
 
+
 /*
 ################################################################################################
-  Nombre Funcion : crear_lista
+  Nombre Función : crear_lista
 
-  Descripcion : Módulo que permite crear el primer nodo de la lista (apuntando a NULL). 
+  Descripción : Módulo que permite crear el primer nodo de la lista (apuntando a NULL). 
 
-  Declaracion : void crear_lista();
+  Declaración : void crear_lista();
 
-  Parametros =>	SIN PARÁMETROS.
+  Parámetros =>	SIN PARÁMETROS.
  
  Valor de Retorno : esta función retorna Void ó vacío.
 #################################################################################################
 */
-void crear_lista()
+void Crear_lista()
 {
 	NODO_L *inicio;
 
@@ -40,16 +43,40 @@ void crear_lista()
 
 
 
+
 /*
 ################################################################################################
-  Nombre Funcion : insertar_después
+  Nombre Función : Lista_vacia
 
-  Descripcion : Permite la inserción de un nuevo nodo después de la posición a la que apunta  el 
+  Descripción : Este módulo comprueba si hay elementos en la lista.
+
+  Declaración : int Lista_vacia(int num_elementos);
+
+  Parámetros :	-NODO_L *inicio: primer 
+ 
+ Valor de Retorno : esta función retorna un entero "booleano".
+#################################################################################################
+*/
+int Lista_vacia(NODO_L *inicio)
+{
+	if (inicio == NULL) return verdadero;
+
+	else return falso; 
+}
+
+
+
+
+/*
+################################################################################################
+  Nombre Función : insertar_después
+
+  Descripción : Permite la inserción de un nuevo nodo después de la posición a la que apunta  el 
   				nodo *p en la lista.
 
-  Declaracion : void insertar_despues(NODO_L **inicio, NODO_L *p, int elemento);
+  Declaración : void insertar_despues(NODO_L **inicio, NODO_L *p, int elemento);
 
-  Parametros :	-NODO_L **inicio: pasamos el primer nodo de la lista por "referencia".
+  Parámetros :	-NODO_L **inicio: pasamos el primer nodo de la lista por "referencia".
 				
 				-NODO_L *p: puntero a un nodo existente, actúa como referencia al nuevo nodo.
 
@@ -58,9 +85,187 @@ void crear_lista()
  Valor de Retorno : esta función retorna Void ó vacío.
 #################################################################################################
 */
-void insertar_despues(NODO_L **inicio, NODO_L *p, int elemento)
+void Insertar_despues(NODO_L **inicio, NODO_L *p, int elemento)
 {
+	NODO_L *nuevo;
 
+	if( (nuevo = malloc(sizeof NODO_L *)) == NULL ) printf("No hay memoria\n"); //creación de memoria dinámica.
+	else{
+		nuevo->dato = elemento;					//se introduce el valor en el nuevo nodo.
+
+		if( Lista_vacia(inicio) == verdadero){  //Si la lista está vacía el nuevo nodo apunta a NULL.
+			*inicio = nuevo;
+			nuevo->siguiente = NULL;
+		}
+		else{
+			nuevo->siguiente = p->siguiente;     //Si ya hay nodos implementados en la lista apuntamos el nuevo nodo al elemento que 
+			p->siguiente = nuevo;				//esté apuntando "p" y "p" pasa a apuntar al nuevo nodo.
+		}
+	}
+}
+
+
+
+
+/*
+################################################################################################
+  Nombre Función : Eliminar
+
+  Descripción : Elimina un nodo de la lista teniendo como referencia su posición.
+
+  Declaración : void Eliminar(NODO_L **inicio, NODO_L *p);
+
+  Parámetros :	-NODO_L **inicio: pasamos el primer nodo de la lista por "referencia".
+				
+				-NODO_L *p: puntero a un nodo existente, actúa como referencia al nuevo nodo.
+
+				-int elemento: valor del nuevo nodo incorporado a la lista.
+ 
+ Valor de Retorno : esta función retorna Void ó vacío.
+#################################################################################################
+*/
+void Eliminar(NODO_L **inicio, NODO_L *p)
+{
+	NODO_L *previo;
+
+	if( Lista_vacia(inicio) == verdadero)  printf("Error: lista vacía.\n");
+
+	else{
+		previo = *inicio;
+
+		while(previo->siguiente != p)   //Se recorre la lista desde el inicio hasta encontrar 
+		{
+			previo = previo->siguiente;
+		}
+		previo->siguiente = p->siguiente;							//el nodo que se quiera eliminar.
+	}
+
+	free(p);
+}
+
+
+
+
+/*
+################################################################################################
+  Nombre Función : Buscar
+
+  Descripción : Busca un nodo en la lista tomando como referencia el valor que almacena.
+
+  Declaración : NODO_L* Buscar(NODO_L *inicio, int valor);
+
+  Parámetros :	-NODO_L *inicio: pasamos el primer nodo de la lista.
+				
+				-int valor: valor que almacena el nodo(dato).
+ 
+ Valor de Retorno : esta función retorna un puntero a NODO_L.
+#################################################################################################
+*/
+NODO_L* Buscar(NODO_L *inicio, int valor)
+{
+	NODO_L *p;
+
+	p = inicio;
+
+	while(p != NULL){					//Recorremos toda la lista.
+
+		if(p->dato == valor) return p;	//Si el valor existe en algún nodo retornamos dicho nodo.
+		p = p->siguiente;
+	}
+
+	return NULL;				
+}
+
+
+
+
+/*
+################################################################################################
+  Nombre Función : Eliminar_valor
+
+  Descripción : Elimina un nodo de la lista teniendo como referencia su valor.
+
+  Declaración : void Eliminar_valor(NODO_L **inicio, int valor);
+
+  Parámetros :	-NODO_L **inicio: pasamos el primer nodo de la lista por "referencia".
+
+				-int valor: valor que se quiere eliminar.
+ 
+ Valor de Retorno : esta función retorna Void ó vacío.
+#################################################################################################
+*/
+void Eliminar_valor(NODO_L **inicio, int valor)
+{
+	NODO_L *p;
+
+	p = Buscar(inicio, valor);
+
+	if (p == NULL) printf("El valor no forma parte de la lista.\n");
+
+	else Eliminar(inicio, p)		//Si encontramos el nodo con el valor que buscamos eliminamos dicho nodo.
+}
+
+
+
+
+/*
+################################################################################################
+  Nombre Función : Recorrer_lista
+
+  Descripción : Este módulo sirve para aplicar una modificación a todos los nodos de la lista.
+
+  Declaración : void Recorrer_lista(NODO_L *inicio);
+
+  Parámetros :	-NODO_L *inicio: pasamos el primer nodo de la lista.
+ 
+ Valor de Retorno : esta función retorna Void ó vacío.
+#################################################################################################
+*/
+void Recorrer_lista(NODO_L *inicio)
+{
+	NODO_L *p;
+
+	p = inicio;
+
+	while(p != NULL){
+
+		//Hacer algo (p->dato);  REALIZAR LA MODIFICACIÓN .
+		p = p->siguiente;
+	}
+}
+
+
+
+
+/*
+################################################################################################
+  Nombre Función : Recorrer_lista
+
+  Descripción : Este módulo sirve para aplicar una modificación a todos los nodos de la lista.
+
+  Declaración : void Recorrer_lista(NODO_L *inicio);
+
+  Parámetros :	-NODO_L *inicio: pasamos el primer nodo de la lista.
+
+  				-int i: posición del nodo al que se accede.
+ 
+ Valor de Retorno : esta función retorna Void ó vacío.
+#################################################################################################
+*/
+void Acceder_nodo(NODO_L *inicio, int i)
+{
+	NODO_L *p;
+	int j;
+
+	p = inicio;
+	j = 0;
+
+	while(j < i){
+		p = p->siguiente;
+		j++;
+	}
+
+	//TRATAR(P);   Hacer algo con dicho nodo.
 }
 
 
