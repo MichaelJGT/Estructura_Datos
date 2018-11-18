@@ -253,7 +253,7 @@ void Vaciar_lista(NODO_L **inicio)
 	while( Lista_vacia(*inicio) == falso ){
 
 		p = (*inicio)->siguiente;
-		free(inicio);
+		free(*inicio);
 		*inicio = p;
 	}
 }
@@ -291,7 +291,7 @@ void Eliminar(NODO_L **inicio, NODO_L *p)
 	free(p);
 }
 
-void I_D(NODO_L **inicio,NODO_L *p, int elemento){
+void Insertar_final(NODO_L **inicio,NODO_L *p, int elemento){
 
 	NODO_L *aux = p;
 	NODO_L *nuevo;
@@ -312,34 +312,69 @@ aux->siguiente= nuevo;
 
 }
 
+void Insertar_antes(NODO_L **inicio, int elemento_insertar, int elemento_anterior){
+
+	NODO_L *p;
+
+	p = Buscar(*inicio,elemento_anterior);
+
+	Insertar_despues(inicio,p,elemento_insertar);
+
+	Eliminar(inicio, p);
+
+	Insertar_despues(inicio,p->siguiente,elemento_anterior);
+
+}
 
 
+
+
+/*
+EJEMPLOS DE IMPLEMENTACIÓN DE LAS FUNCIONES.
+*/
 void main()
 {
-	int i,d;
+	int i;
 	NODO_L *inicio,*nuevo,*p;
+
 
 	inicio = Crear_lista_vacia(inicio); //Creando el primer nodo que apunta a NULL.
 
+	p = inicio;							//p es n puntero a un nodo, empleado para insertar,eliminar...nodos.
 
-	Insertar_despues(&inicio, inicio, 0);
+	Insertar_despues(&inicio, p, 20); 	//insertamos un nodo despues del inicio con valor 20. 
 
-	printf("HOLA1\n");
+	p = Buscar(inicio, 20);			//Apuntamos "p" al último nodo introducido(con valor 20).
 
 	for(i=0;i<=5;i++){
 
-	Insertar_despues(&inicio, Buscar(inicio, i), i+1);
+		Insertar_despues(&inicio, p, i);  //Creación de 5 nodos con valor, "i".
 
-	if(i=5) break;
+		p = Buscar(inicio, i);
+	}
 	
-	/*Insertar_despues(&inicio,inicio,20);
-	inicio= inicio->siguiente;*/
+	Recorrer_lista_pej_mostrar(inicio);  //Mostramos la lista generada hasta el momento.
 
-		//I_D(&inicio, inicio, i );
+	p= Buscar(inicio, 20);		//Buscamos la posición del nodo con valor 20 y guardamos su posicion en p. 
 
-}
-	printf("HOLA2\n");
-	
+	Eliminar(&inicio, p);		//Ahora ya podemos eliminar el primer nodo.
+
+	printf("\n-------------Eliminamos el primer Nodo--------------\n\n");
+
+	Recorrer_lista_pej_mostrar(inicio);
+
+	printf("\n---------Insertamos en la primera posición de la lista un 100----------\n\n");
+
+	//Ahora metemos otro nodo con valor 100 en la primera posición.
+
+	Insertar_antes(&inicio,100,0);
+
+	Recorrer_lista_pej_mostrar(inicio);
+
+	printf("\n--------------Vaciamos la lista-------------\n\n");
+
+
+	Vaciar_lista(&inicio);
 	Recorrer_lista_pej_mostrar(inicio);
 
 
