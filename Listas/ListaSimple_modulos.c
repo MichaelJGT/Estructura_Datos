@@ -305,11 +305,143 @@ void Vaciar_lista(NODO_L **inicio)
 
 
 
+/*
+################################################################################################
+  Nombre Función : insertar_en_orden
+
+  Descripción : Permite la inserción de un nuevo nodo en función del campo clave escogido.
+
+  Declaración : void Insertar_en_orden(NODO_L **inicio, int elemento);
+
+  Parámetros :	-NODO_L **inicio: pasamos el primer nodo de la lista por "referencia".
+
+				-int elemento: valor del nuevo nodo incorporado a la lista.
+ 
+ Valor de Retorno : esta función retorna Void ó vacío.
+#################################################################################################
+*/
+void Insertar_en_orden(NODO_L **inicio, int elemento)
+{
+	NODO_L *nuevo;
+	NODO_L *p_anterior, *p_siguiente;
+
+	if( (nuevo = malloc(sizeof(NODO_L)) ) == NULL ) printf("No hay memoria\n"); //Reservamos memoria para el nuevo nodo.
+	else{
+		nuevo->dato = elemento;			//Introducimos el valor en el campo correspondiente del nuevo nodo.
+		p_anterior = NULL;				
+		p_siguiente = *inicio;			//situamos LOS PUNTEROS P al comienzo de la lista (los dos punteros, uno al NULL inicial y otro a inicio).
+
+		while( (p_siguiente != NULL) && (p_siguiente->dato < elemento) ){  //mientras no se encuentre un dato mayor al nuestro,recorremos la lista.
+
+			p_anterior = p_siguiente;		
+			p_siguiente = p_siguiente->siguiente;	//Avanzamos los punteros de referencia una posición en la lista por vuelta del bucle.
+		}
+
+		nuevo->siguiente = p_siguiente;	
+		//Nótese que si no se encuentra un dato mayor al nuestro, el puntero de referencia p_siguiente apuntará a NULL y p_anterior al último nodo.
+
+		if(p_siguiente == *inicio) *inicio = nuevo;
+		else{
+			p_anterior->siguiente = nuevo;		//Una vez encontrado el elemento mayor al nuestro, el nuevo nodo se incorpora delante del nodo que contiene dicho dato mayor.
+		}										//De no encontrar uno mayor, se situará como último nodo de la lista.
+	}
+
+}	
+
+
+
+
+/*
+################################################################################################
+  Nombre Función : Ordenacion_seleccion_Lsimples
+
+  Descripción : Ordena la lista con el método de Selección Directa.
+
+  Declaración : void Ordenacion_seleccion_Lsimples(NODO_L **inicio);
+
+  Parámetros :	-NODO_L **inicio: pasamos el primer nodo de la lista por "referencia".
+ 
+ Valor de Retorno : esta función retorna Void ó vacío.
+#################################################################################################
+*/
+void Ordenacion_seleccion_Lsimples(NODO_L **inicio)
+{
+	NODO_L *orden_i, *orden_f;
+	NODO_L *no_orden_i;
+	NODO_L *p_min, *p_min_prev, *q, *q_prev;
+
+	if(Lista_vacia(*inicio) == verdadero){
+
+		printf("La lista está vacía, no se puede ordenar.\n");
+		exit(0);
+	}
+	
+	orden_i = NULL;
+	orden_f = NULL;
+	no_orden_i = *inicio;
+
+	while(no_orden_i->siguiente != NULL){	//Se busca el menor elemento de la lista no ordenada.
+		
+		p_min_prev = NULL;
+		p_min = no_orden_i;
+
+		q_prev = no_orden_i;
+		q = no_orden_i->siguiente;
+
+		while(q != NULL){
+
+			if(q->dato < p_min->dato){
+
+				p_min_prev = q_prev;
+				p_min = q;
+			}
+
+			//Se avanza un nodo en la lista no ordenada.
+
+			q_prev = q;
+			q = q->siguiente;
+		}
+
+		//Se desconecta de la lista no ordenada.
+
+		if(p_min_prev != NULL){
+
+			p_min_prev->siguiente = p_min->siguiente;
+		}
+
+		if(p_min == no_orden_i){
+
+			no_orden_i = no_orden_i->siguiente;
+		}
+
+		//Se conecta a la lista ordenada.
+
+		if(orden_i == NULL){
+
+			orden_i = p_min;
+		}
+		else{
+			orden_f->siguiente = p_min;
+		}
+
+		orden_f = p_min;
+
+		p_min->siguiente = NULL;
+	}
+
+	//Se enlaza a la lista ordenada el último nodo.
+
+	orden_f->siguiente = no_orden_i;
+
+	*inicio = orden_i;
+}
+
 
 void main(){
 
 	NODO_L *inicio;
-	NODO_L *nuevo;
+	NODO_L *p;
+	NODO_L *L;
 
 	inicio = Crear_lista(inicio); //Creación de la lista vacía.
 
@@ -321,7 +453,22 @@ según las necesidades del consumidor.
 	He aquí un ejemplo:
 */
 
-	Insertar_despues(&inicio,nuevo,5);    //Inserción del primer nodo con valor(dato) 5.
+
+	Insertar_despues(&inicio,inicio,5);    //Inserción del primer nodo con valor(dato) 5.
+
+	p = inicio;
+
+	Insertar_despues(&inicio, p,761);
+
+	Insertar_despues(&inicio, p,10);
+
+	Insertar_despues(&inicio, p,361);
+
+	Insertar_despues(&inicio, p, 51);
+
+	Insertar_despues(&inicio, p,1661);
+
+	Ordenacion_seleccion_Lsimples(&inicio);
 
 	Recorrer_lista_pej_mostrar(inicio);	  //Módulo modificado para mostrar el valor
 										  // de los nodos de la lista.
